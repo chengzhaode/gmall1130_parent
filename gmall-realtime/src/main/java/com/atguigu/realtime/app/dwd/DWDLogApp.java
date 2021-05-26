@@ -1,9 +1,10 @@
-package com.atguigu.realtime.app;
+package com.atguigu.realtime.app.dwd;
 
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.atguigu.realtime.app.BaseApp;
 import com.atguigu.realtime.common.Constant;
 import com.atguigu.realtime.util.MyCommonUtil;
 import com.atguigu.realtime.util.MyKafkaUtil;
@@ -29,7 +30,7 @@ import java.time.Duration;
 import java.util.Comparator;
 import java.util.List;
 
-public class DWDLogApp extends BaseApp{
+public class DWDLogApp extends BaseApp {
     public static void main(String[] args) {
         new DWDLogApp().init(2000,2,"DWDLogApp","DWDLogApp",Constant.ODS_LOG);
     }
