@@ -6,6 +6,7 @@ import com.atguigu.realtime.app.BaseApp;
 import com.atguigu.realtime.common.Constant;
 import com.atguigu.realtime.util.MyKafkaUtil;
 import com.google.common.collect.Lists;
+import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
@@ -30,7 +31,7 @@ public class DWDUVApp extends BaseApp {
     protected void run(StreamExecutionEnvironment env,
                        DataStreamSource<String> sourceStream) {
         sourceStream
-                .map(JSON::parseObject)
+                /*.map(JSON::parseObject)
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy
                                 .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(5))
@@ -64,7 +65,8 @@ public class DWDUVApp extends BaseApp {
                             firstVisitState.update(obj.getLong("ts"));
                         }
                     }
-                })
-                .addSink(MyKafkaUtil.getKafkaSink(Constant.DWM_UV));
+                })*/
+                .print();
+                //.addSink(MyKafkaUtil.getKafkaSink(Constant.DWM_UV));
     }
 }

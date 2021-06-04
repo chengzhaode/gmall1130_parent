@@ -19,7 +19,7 @@ public class MyPhoenixSinkFunction extends RichSinkFunction<Tuple2<JSONObject, T
 
     private Connection conn;
     private ValueState<Boolean> tableCreateState;
-
+    
     @Override
     public void open(Configuration parameters) throws Exception {
         String phoenixDriver = "org.apache.phoenix.jdbc.PhoenixDriver";

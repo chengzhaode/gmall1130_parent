@@ -17,7 +17,6 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.util.Collector;
@@ -42,7 +41,7 @@ public class DWDDbApp extends BaseApp implements Serializable {
         //2.读取配置表的内容
         SingleOutputStreamOperator<TableProcess> tableProcessStream = readTablePrecess(env);
 
-        // 3. 把配置表做成广播流, 与数据进行connect, 利用广播状态来控制每个数据流的流向
+       /* // 3. 把配置表做成广播流, 与数据进行connect, 利用广播状态来控制每个数据流的流向
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcess>> toKafkaStream = dynamicSplitStream(etledDataStream, tableProcessStream);
         DataStream<Tuple2<JSONObject, TableProcess>> toHbaseStream = toKafkaStream.getSideOutput(hbaseTag);
 
@@ -51,7 +50,7 @@ public class DWDDbApp extends BaseApp implements Serializable {
         sendToKafka(toKafkaStream);
         // 4.2 把数据写入到HBase中
         sentToHbase(toHbaseStream);
-
+*/
 
     }
 
@@ -120,7 +119,6 @@ public class DWDDbApp extends BaseApp implements Serializable {
                     }
                 });
     }
-
     private SingleOutputStreamOperator<TableProcess> readTablePrecess(StreamExecutionEnvironment env) {
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
@@ -144,8 +142,7 @@ public class DWDDbApp extends BaseApp implements Serializable {
                 "   'debezium.snapshot.mode' = 'initial' " +  // 每次启动的时候, 首先读取mysql表中的全量数据, 然后在从binlog最新的位置开始读取
                 ")"
         );
-
-        Table table = tEnv.sqlQuery("select " +
+       Table table = tEnv.sqlQuery("select " +
                 "source_table sourceTable," +
                 "sink_type sinkType," +
                 "operate_type operateType," +

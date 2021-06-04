@@ -56,11 +56,14 @@ public class DWDLogApp extends BaseApp {
         threeStream.f2.addSink(MyKafkaUtil.getKafkaSink(Constant.DWD_DISPLAY_LOG));
     }
 
+
     private Tuple3<SingleOutputStreamOperator<JSONObject>, DataStream<JSONObject>, DataStream<JSONObject>> splitStream(SingleOutputStreamOperator<JSONObject> validateFlatStream) {
+
         /*
         分流:
             使用侧输出流, 把不同的日志放入不同的流, 最后每个流都会把数据写入到kafka中(dwd)
          */
+
         OutputTag<JSONObject> pageTag = new OutputTag<JSONObject>("page"){};
         OutputTag<JSONObject> displayTag = new OutputTag<JSONObject>("page"){};
         SingleOutputStreamOperator<JSONObject> startLogStream = validateFlatStream
@@ -97,8 +100,9 @@ public class DWDLogApp extends BaseApp {
         DataStream<JSONObject> pageStream = startLogStream.getSideOutput(pageTag);
         DataStream<JSONObject> displayTagStream = startLogStream.getSideOutput(displayTag);
         return Tuple3.of(startLogStream,pageStream,displayTagStream);
-
     }
+
+
 
     private SingleOutputStreamOperator<JSONObject> distingushNewOrOld(DataStreamSource<String> sourceStream) {
         /*
@@ -146,7 +150,7 @@ public class DWDLogApp extends BaseApp {
                                 if (i == 0) {
                                     objList.get(i).getJSONObject("common").put("is_new", "1");
                                     firstVisitState.update(objList.get(i).getLong("ts"));
-                                    objList.get(i).getJSONObject("common").put("is_new", "0");
+                                    System.out.println(objList.get(i).getJSONObject("common").getString("mid"));
                                 } else {
                                     objList.get(i).getJSONObject("common").put("is_new", 0);
                                 }
